@@ -1,0 +1,28 @@
+#include <vexMotor.h>
+#include <Servo.h>
+
+vexMotor VexMotor1;  
+vexMotor VexMotor2;
+vexMotor VexMotor3;  
+vexMotor VexMotor4;
+
+
+void setup()
+{
+  VexMotor1.attach(3); 
+  VexMotor2.attach(5); 
+  VexMotor3.attach(7); 
+  VexMotor4.attach(9); 
+  Serial.begin(9600);
+  
+}
+
+void loop()
+{
+  int speed = 200;
+  int rspeed = speed * -1;
+  VexMotor1.write(speed);
+  VexMotor2.write(speed);
+  VexMotor3.write(rspeed);
+  VexMotor4.write(rspeed);
+}
