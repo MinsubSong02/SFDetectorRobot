@@ -1,28 +1,72 @@
 #include <vexMotor.h>
 #include <Servo.h>
 
-vexMotor VexMotor1;  
-vexMotor VexMotor2;
-vexMotor VexMotor3;  
-vexMotor VexMotor4;
+vexMotor rfMotor;  
+vexMotor rbMotor;
+vexMotor lfMotor;  
+vexMotor lbMotor;
+
+float rtIR = A1; //Right Top IR Sensor
+float rbIR = A2; //Right Bottom IR Sensor
+float ltIR = A4; //Left Top IR Sensor
+float lbIR = A6; //Left Bottom IR Sensor
 
 
 void setup()
 {
-  VexMotor1.attach(3); 
-  VexMotor2.attach(5); 
-  VexMotor3.attach(7); 
-  VexMotor4.attach(9); 
+  rfMotor.attach(3); 
+  rbMotor.attach(5); 
+  lfMotor.attach(7); 
+  lbMotor.attach(9); 
   Serial.begin(9600);
+  pinMode(rtIR, OUTPUT);
+  pinMode(rbIR, OUTPUT);
+  pinMode(ltIR, OUTPUT);
+  pinMode(lbIR, OUTPUT);
   
 }
 
 void loop()
 {
+  Serial.println(analogRead(A1));
+  Serial.println(analogRead(A2));
+  Serial.println(analogRead(A4));
+  Serial.println(analogRead(A6));
+  
   int speed = 200;
   int rspeed = speed * -1;
-  VexMotor1.write(speed);
-  VexMotor2.write(speed);
-  VexMotor3.write(rspeed);
-  VexMotor4.write(rspeed);
+  
+  rfMotor.write(speed);
+  rbMotor.write(speed);
+  lfMotor.write(rspeed);
+  lbMotor.write(rspeed);
+
+
+
+  if(analogRead(A1) < 250 || analogRead(A2) < 250 || analogRead(A4) > 250 || analogRead(A6) > 250) {
+    rfMotor.write(-speed);
+    rbMotor.write(-speed);
+    lfMotor.write(-rspeed);
+    lbMotor.write(-rspeed);
+    
+    delay(1000);
+    rfMotor.write(speed);
+    rbMotor.write(speed); 
+    lfMotor.write(speed/4);
+    lbMotor.write(speed/4);
+    delay(1000);
+  }
+  if(analogRead(A1) > 250 && analogRead(A2) > 250 || analogRead(A4) > 250 || analogRead(A6) > 250) {
+    rfMotor.write(-speed);
+    rbMotor.write(-speed);
+    lfMotor.write(-rspeed);
+    lbMotor.write(-rspeed);
+    
+    delay(1000);
+    rfMotor.write(speed/4);
+    rbMotor.write(speed/4); 
+    lfMotor.write(speed);
+    lbMotor.write(speed);
+    delay(1000);
+  }
 }
