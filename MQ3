@@ -1,0 +1,68 @@
+//MQ-2 Sensor Code
+
+int redLED = 12;
+int greenLED = 11;
+//int buzzer = 10;
+
+
+//int sensor1 = A5;
+//MQ3 is Alchohol Detector
+int MQ3 = A2;
+//int sensor3 = A3;
+//int sensor4 = A2;
+// Your threshold value
+
+void setup() {
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  /*pinMode(buzzer, OUTPUT);
+    pinMode(sensor1, INPUT);*/
+  pinMode(MQ3, INPUT);
+  //pinMode(sensor3, INPUT);
+  //pinMode(sensor4, INPUT);
+  Serial.begin(9600);
+
+
+  /*digitalWrite(buzzer, LOW);
+    digitalWrite(greenLED, LOW);
+    digitalWrite(redLED, LOW);*/
+}
+
+
+void loop() {
+  //int value1 = analogRead(sensor1);
+  int valMQ3 = analogRead(MQ3);
+  //int value3 = analogRead(sensor3);
+  //int value4 = analogRead(sensor4);
+  //int sensorThres = 100;
+  int alchoholmin = 440;
+
+
+  if(valMQ3 < 200) {
+    valMQ3 = 0;
+  }
+
+  //Serial.print("Pin A5: ");
+  //Serial.println(sensor1);
+  Serial.print("MQ3: ");
+  Serial.println(valMQ3);
+  /*Serial.print("Pin A3: ");
+    Serial.println(sensor3);
+    Serial.print("Pin A2: ");
+    Serial.println(sensor4);*/
+
+  // Checks if it has reached the threshold value
+  //Alchohol Value Check
+  if (valMQ3 > alchoholmin) {
+    //digitalWrite(Buzzer,HIGH);
+    digitalWrite(redLED, HIGH);
+    digitalWrite(greenLED, LOW);
+  }
+  else {
+    //digitalWrite(Buzzer,LOW);
+    digitalWrite(redLED, LOW);
+    digitalWrite(greenLED, HIGH);
+
+  }
+  delay(100);
+}
