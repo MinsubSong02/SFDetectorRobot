@@ -1,0 +1,73 @@
+//This is the various gas sensors code!
+
+int MQ2 = A2;
+int MQ3 = A3;
+int MQ9 = A4;
+int MQ135 = A5;
+
+int redLED = 11;
+int greenLED = 10;
+
+void setup() {
+  //setting PinModes for various OUTPUTs
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  pinMode(MQ2, INPUT);
+  pinMode(MQ3, INPUT);
+  pinMode(MQ9, INPUT);
+  pinMode(MQ135, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  //Getting analogvaleus from sensors
+
+  int MQ2val = analogRead(MQ2);
+  int MQ3val = analogRead(MQ3);
+  int MQ9val = analogRead(MQ9);
+  int MQ135val = analogRead(MQ135);
+
+  //Threshold Values
+  int MQ2min = 400;
+  int MQ3min = 440;
+  int MQ9min = 400;
+  int MQ135min = 400;
+
+  Serial.print("MQ2 Value: ");
+  Serial.println(MQ2val);
+  Serial.print("MQ3 Value: ");
+  Serial.println(MQ3val);
+  Serial.print("MQ9 Value: ");
+  Serial.println(MQ9val);
+  Serial.print("MQ135 Value: ");
+  Serial.println(MQ135val);
+
+  if(MQ2val < 200) {
+    MQ2val = 0;
+  }
+  if(MQ3val < 200) {
+    MQ3val = 0;
+  }
+  if(MQ9val < 200) {
+    MQ9val = 0;
+  }
+  if(MQ135val < 200) {
+    MQ135val = 0;
+  }
+  if (MQ2val > MQ2min) {
+    Serial.println("ALERT! FLAMMABLE GAS LEAK");
+  }
+  if (MQ3val > MQ3min) {
+    Serial.println("ALERT! ALCHOHOL LEAK");
+  }
+  if (MQ9val > MQ9min) {
+    Serial.println("METHANE LEAK");
+  }
+  if (MQ135val > MQ135min) {
+    Serial.println("AIR QUALITY IS BAD");
+  }
+  if(MQ2val < MQ2min && MQ3val < MQ3min && MQ9val < MQ9min && MQ135val < MQ135min) {
+    Serial.println("NO DETECTABLE GAS LEAKS");
+  }
+  delay(1000);
+}
