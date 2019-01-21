@@ -1,0 +1,62 @@
+#include <Servo.h>
+#include <vexMotor.h>
+
+vexMotor Cargo1;
+vexMotor Cargo2;
+vexMotor angle1;
+vexMotor angle2;
+
+int IR1 = 8;
+int IR2 = 9;
+//State0 means nothing, State1 means IN, State 2 means OUT
+int prep = 0;
+int state = 0;
+
+int IR_IN = HIGH;  // HIGH MEANS NO OBSTACLE
+int IR_OUT = HIGH;
+int x = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+  Cargo1.attach(5);
+  Cargo2.attach(4);
+  /*angle1.attach(1);
+  angle2.attach(3);*/
+  pinMode(IR1, INPUT);
+  pinMode(IR2, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //changeposition();
+  IR_IN = digitalRead(IR1);
+  IR_OUT = digitalRead(IR2);
+  if(IR_OUT == HIGH && IR_IN == HIGH) {
+    Cargo1.write(0);
+    Cargo2.write(0);
+  }
+  else if(IR_OUT == HIGH && IR_IN == LOW)  {
+    cargoRun1();
+  }
+  else if(IR_OUT == LOW && IR_IN == HIGH) {
+    cargoRun2();
+  }
+  else {
+    Cargo1.write(0);
+    Cargo2.write(0);
+  }
+
+}
+
+void cargoRun1(){
+  Cargo1.write(255);
+  Cargo2.write(-255);
+  delay(500);
+}
+
+void cargoRun2() {
+  Cargo1.write(-255);
+  Cargo2.write(255);
+  delay(500);
+}
