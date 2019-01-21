@@ -1,0 +1,64 @@
+#include <Servo.h>
+#include <vexMotor.h>
+
+vexMotor angle1;
+vexMotor angle2;
+
+int IR1 = 8;
+int IR2 = 9;
+//State0 means nothing, State1 means IN, State 2 means OUT
+int prep = 0;
+int state = 0;
+
+int IR_IN = HIGH;  // HIGH MEANS NO OBSTACLE
+int IR_OUT = HIGH;
+int x = 0;
+
+void setup() {
+  angle1.attach(2);
+  angle2.attach(3);
+  pinMode(IR1, INPUT);
+  pinMode(IR2, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  IR_IN = digitalRead(IR1);
+  IR_OUT = digitalRead(IR2);
+  if(IR_IN == HIGH && IR_OUT == LOW) {
+    if(x == 0) {
+    hatchRun1();
+    }
+  }
+  else if(IR_IN == LOW && IR_OUT == HIGH) {
+    if(x == 1) {
+    hatchRun2();
+    }
+  }
+  else if(IR_IN == HIGH && IR_OUT == HIGH) {
+    hatchRunNone();
+  }
+  else {
+    hatchRunNone();
+  }
+  
+}
+
+void hatchRun1(){
+  angle1.write(100);
+  angle2.write(-100);
+  delay(150);
+  x = 1;
+}
+
+void hatchRun2() {
+  angle1.write(-100);
+  angle2.write(100);
+  delay(150);
+  x = 0;
+}
+
+void hatchRunNone() {
+  angle1.write(0);
+  angle2.write(0);
+}
